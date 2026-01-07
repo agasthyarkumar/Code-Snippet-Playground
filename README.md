@@ -37,7 +37,12 @@ GitHub Actions workflows in `.github/workflows/`:
 - `ci.yml` – install, lint, test, build on push/PR
 - `lint.yml` – lint only
 - `test.yml` – run unit tests
-- `deploy.yml` – build & placeholder deploy on push to `main`
+- `deploy.yml` – build and publish to GitHub Pages on push to `main`
+
+## Deployment (GitHub Pages)
+- Builds are published automatically from the `main` branch to GitHub Pages at https://agasthyarkumar.github.io/Code-Snippet-Playground/
+- Vite `base` is set to `/Code-Snippet-Playground/` for correct asset paths on Pages.
+- To trigger a manual deploy: run `npm run build`, then dispatch the `Deploy to GitHub Pages` workflow or push to `main`.
 
 ## Assumptions
 - Single-user mocked context; all snippets are local.
