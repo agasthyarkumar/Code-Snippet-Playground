@@ -311,6 +311,61 @@ button.secondary {
   color: var(--muted);
 }
 
+/* Language stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 10px 0 18px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  position: relative;
+}
+
+.stat-card.active {
+  border-color: rgba(94, 234, 212, 0.6);
+  box-shadow: 0 10px 24px rgba(94, 234, 212, 0.18);
+}
+
+.stat-lang {
+  font-weight: 600;
+}
+
+.stat-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Simple tooltip using data-tooltip */
+.stat-card[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  background: #11151f;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  max-width: 320px;
+  box-shadow: var(--shadow);
+  z-index: 5;
+}
+
 @media (max-width: 640px) {
   .header {
     flex-direction: column;

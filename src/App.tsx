@@ -5,6 +5,7 @@ import Modal from './components/Modal';
 import LogoMark from './components/LogoMark';
 import { useSnippets, SavePayload } from './hooks/useSnippets';
 import { DuplicateConflicts, Snippet } from './types';
+import LanguageStats from './components/LanguageStats';
 
 const App = () => {
   const { snippets, search, save, remove, allLanguages, forceSave } = useSnippets();
@@ -124,6 +125,12 @@ const App = () => {
           ))}
         </select>
       </div>
+
+      <LanguageStats
+        snippets={snippets}
+        selected={languageFilter || undefined}
+        onSelect={(lang) => setLanguageFilter(lang)}
+      />
 
       {error && <div className="alert danger">{error}</div>}
 

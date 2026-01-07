@@ -53,7 +53,6 @@ const CodeEditor = ({ value, language, onChange }: CodeEditorProps) => {
         onChange={(val) => onChange(val ?? '')}
         onMount={() => setReady(true)}
         onValidate={() => setReady(true)}
-        onError={() => setMode('basic')}
         loading={<div style={{ padding: 12 }}>Loading editor…</div>}
       />
       <div style={{ padding: '10px 12px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
