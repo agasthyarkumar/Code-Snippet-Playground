@@ -9,7 +9,7 @@ type CodeEditorProps = {
 
 const CodeEditor = ({ value, language, onChange }: CodeEditorProps) => {
   const lang = useMemo(() => language || 'javascript', [language]);
-  const [mode, setMode] = useState<'basic' | 'monaco'>('basic');
+  const [mode, setMode] = useState<'basic' | 'monaco'>('monaco');
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
