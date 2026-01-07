@@ -26,7 +26,8 @@ type SaveResult = {
   wasNew?: boolean;
 };
 
-const STORAGE_KEY = 'ai-snippet-manager:v1';
+const STORAGE_KEY = 'code-snippet-playground:v1';
+const LEGACY_KEYS = ['ai-snippet-manager:v1'];
 
 const seedSnippets = (): Snippet[] => {
   const starter = [
@@ -65,7 +66,25 @@ SET value = EXCLUDED.value;`,
 
 export const useSnippets = () => {
   const [snippets, setSnippets] = useState<Snippet[]>(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    // Try new key first
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      // Migrate from any legacy keys if found
+      for (const k of LEGACY_KEYS) {
+        const legacy = localStorage.getItem(k);
+        if (legacy) {
+          raw = legacy;
+          try {
+            localStorage.setItem(STORAGE_KEY, legacy);
+            localStorage.removeItem(k);
+          } catch (e) {
+            // non-fatal; continue with parsed legacy data in memory
+          }
+          break;
+        }
+      }
+    }
+
     if (raw) {
       try {
         const parsed = JSON.parse(raw) as Snippet[];

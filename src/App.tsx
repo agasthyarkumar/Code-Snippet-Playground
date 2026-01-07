@@ -89,7 +89,7 @@ const App = () => {
         <div className="brand">
           <LogoMark />
           <div>
-            <h1>Code Snippet Manager</h1>
+            <h1>Code Snippet Playground</h1>
             <p className="muted" style={{ margin: 0 }}>
               Save, organize, and reuse your code snippets.
             </p>

@@ -1,4 +1,4 @@
-# Code-Snippet-Playground
+# Code Snippet Playground
 
 Minimal, developer-focused snippet manager that behaves like a to-do list for code. Frontend-only (React + Vite + TypeScript) with Monaco editor, client-side validation, and duplicate detection.
 
