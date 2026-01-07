@@ -4,7 +4,7 @@ import { SavePayload } from '../hooks/useSnippets';
 import CodeEditor from './CodeEditor';
 import TagInput from './TagInput';
 
-const COMMON_LANGS = ['javascript', 'typescript', 'python', 'java', 'cpp', 'rust', 'sql', 'go'];
+const COMMON_LANGS = ['JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 'Rust', 'SQL', 'Go'];
 
 type SnippetFormProps = {
   initial?: Snippet | null;
@@ -78,7 +78,7 @@ const SnippetForm = ({
             list="language-options"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            placeholder="auto-detect"
+            placeholder="Select language (optional)"
           />
           <datalist id="language-options">
             {languageOptions.map((lang) => (

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Github, GitBranch, Moon, Sun, Plus } from 'lucide-react';
 import SnippetCard from './components/SnippetCard';
 import SnippetForm from './components/SnippetForm';
 import Modal from './components/Modal';
 import LogoMark from './components/LogoMark';
+import LanguageStats from './components/LanguageStats';
 import { useSnippets, SavePayload } from './hooks/useSnippets';
 import { DuplicateConflicts, Snippet } from './types';
-import LanguageStats from './components/LanguageStats';
 
 const getInitialTheme = (): 'light' | 'dark' => {
   if (typeof window === 'undefined') return 'light';
@@ -105,67 +106,46 @@ const App = () => {
       <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-8 px-4 py-10">
         <header className="flex items-center gap-3 py-2">
           <LogoMark />
-          <h1 className="text-2xl font-semibold leading-none tracking-tight">Code Snippet Playground</h1>
+          <div>
+            <h1 className="text-2xl font-semibold leading-none tracking-tight">Code Snippet Playground</h1>
+            <p className="text-xs text-black/60 dark:text-white/60 mt-1">Save, organize, and reuse your code snippets.</p>
+          </div>
           <div className="flex-1" />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <a
-              className={buttonClass}
+              className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"
               href="https://github.com/agasthyarkumar"
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub profile"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 18 4.77 5.07 5.07 0 0 0 17.91 1S16.73.65 14 2.48a13.38 13.38 0 0 0-5 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 17.13V21" />
-              </svg>
+              <Github size={18} />
             </a>
             <a
-              className={buttonClass}
+              className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"
               href="https://github.com/agasthyarkumar/Code-Snippet-Playground"
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub repository"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15V6a2 2 0 0 0-2-2h-4.5L12 6.5 9.5 4H5a2 2 0 0 0-2 2v9" />
-                <path d="M3 17h18" />
-                <path d="M17 21H7" />
-              </svg>
+              <GitBranch size={18} />
             </a>
             <button
-              className={buttonClass}
+              className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"
               type="button"
               onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="5" />
-                  <path d="M12 1v2m0 18v2m11-11h-2M3 12H1m18.364-7.364-1.414 1.414M6.05 17.95l-1.414 1.414m0-13.414L6.05 6.05m11.314 11.314 1.414 1.414" />
-                </svg>
-              )}
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button className={buttonClass} onClick={startCreate} type="button" aria-label="Add snippet">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14" />
-                <path d="M5 12h14" />
-              </svg>
+            <button className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform" onClick={startCreate} type="button" aria-label="Add snippet">
+              <Plus size={18} />
             </button>
           </div>
         </header>
 
-        <div className="h-px w-full max-w-5xl bg-black/20 dark:bg-white/30" />
-
-        <p className="text-sm text-black/70 dark:text-white/70">
-          Save, organize, and reuse your code snippets.
-        </p>
-
-        <div className="w-full max-w-4xl space-y-3">
-          <div className="panel animate-soft flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+        <div className="w-full space-y-3">
+          <div className="panel animate-soft flex flex-col gap-3 md:flex-row md:items-center md:gap-4 shadow-md">
             <input
               className={`${inputClass} md:flex-[3]`}
               placeholder="Search by name, description, or tag"
@@ -187,17 +167,11 @@ const App = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-4xl space-y-3">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-black dark:text-white">
-            <span>Languages</span>
-            <span className="rounded-full border border-black px-2 py-0.5 text-[11px] font-semibold text-black dark:border-white dark:text-white">
-              {snippets.filter((s) => s.language).length}
-            </span>
-          </div>
+        <div className="w-full animate-slide-left">
           <LanguageStats
             snippets={snippets}
             selected={languageFilter || undefined}
-            onSelect={(lang) => setLanguageFilter(lang)}
+            onSelect={(lang) => setLanguageFilter((prev) => (prev === lang ? '' : lang))}
           />
         </div>
 
@@ -239,9 +213,9 @@ const App = () => {
           </div>
         )}
 
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
+        <div className="flex w-full flex-col gap-4">
           {filtered.length === 0 && (
-            <div className="panel flex flex-col items-center gap-3 text-center text-gray-500">
+            <div className="panel animate-scale flex flex-col items-center gap-3 text-center text-black/70 dark:text-white/70 shadow-md">
               <div className="text-sm">No snippets yet. Create one to get started.</div>
               <button className={buttonClass} onClick={startCreate} type="button">
                 Create snippet
@@ -255,6 +229,7 @@ const App = () => {
               onEdit={startEdit}
               onDelete={onDelete}
               buttonClass={buttonClass}
+              theme={theme}
             />
           ))}
         </div>
@@ -270,6 +245,9 @@ const App = () => {
             buttonClass={buttonClass}
           />
         )}
+      </div>
+      <div className="fixed bottom-3 right-4 text-xs text-black/50 dark:text-white/50 pointer-events-none select-none">
+        <span className="typewriter">Made with ❤️ by Agasthya</span>
       </div>
     </div>
   );

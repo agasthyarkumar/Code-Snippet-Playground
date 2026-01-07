@@ -46,7 +46,7 @@ export function useDebounce(value, delay = 250) {
   return debounced;
 }`,
       keyTerms: ['react', 'hooks', 'debounce'],
-      language: 'javascript',
+      language: 'JavaScript',
     },
     {
       id: nanoid(),
@@ -57,7 +57,7 @@ VALUES ($1, $2)
 ON CONFLICT (id) DO UPDATE
 SET value = EXCLUDED.value;`,
       keyTerms: ['postgres', 'sql', 'upsert'],
-      language: 'sql',
+      language: 'SQL',
     },
   ];
 
