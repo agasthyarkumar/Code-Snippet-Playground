@@ -1,9 +1,9 @@
 # Code Snippet Playground
 
-Minimal, developer-focused snippet manager that behaves like a to-do list for code. Frontend-only (React + Vite + TypeScript) with Monaco editor, client-side validation, and duplicate detection.
+Minimal, developer-focused snippet manager that behaves like a to-do list for code. Frontend-only (React + Vite + TypeScript) with a clean textarea editor and Prism-based code highlighting, plus client-side validation and duplicate detection.
 
 ## Features
-- Create, edit, delete snippets with IDE-like editor (Monaco).
+- Create, edit, delete snippets with a simple editor (textarea) and Prism-highlighted display.
 - Fields: name (unique), description, snippet code, key terms (tags), language (auto-detect or manual).
 - Validation: trims leading/trailing spaces (warns when trimming), blocks empty/whitespace-only code.
 - Duplicate detection: warns on duplicate name or normalized code content before saving; “save anyway” override.

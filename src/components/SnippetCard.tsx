@@ -1,3 +1,5 @@
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Snippet } from '../types';
 
 type SnippetCardProps = {
@@ -16,21 +18,19 @@ const SnippetCard = ({ snippet, onEdit, onDelete }: SnippetCardProps) => {
         </div>
         <div className="badge">{snippet.language ?? 'auto'}</div>
       </div>
-      <pre
-        style={{
-          background: 'rgba(255,255,255,0.02)',
-          borderRadius: 12,
-          padding: 12,
-          border: '1px solid var(--border)',
-          whiteSpace: 'pre-wrap',
-          fontFamily: 'Space Grotesk, Fira Code, monospace',
-          margin: 0,
-          maxHeight: 200,
-          overflow: 'auto',
-        }}
-      >
-        {snippet.code}
-      </pre>
+      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)' }}>
+        <SyntaxHighlighter
+          language={snippet.language ?? 'text'}
+          style={oneLight}
+          showLineNumbers
+          customStyle={{
+            margin: 0,
+            fontSize: 13,
+          }}
+        >
+          {snippet.code}
+        </SyntaxHighlighter>
+      </div>
       {snippet.keyTerms.length > 0 && (
         <div className="tags">
           {snippet.keyTerms.map((tag) => (
