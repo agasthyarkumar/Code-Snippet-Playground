@@ -10,11 +10,45 @@
   --warn: #fbbf24;
   --card: #1b1f29;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fast: 140ms;
+  --normal: 220ms;
   font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   background: radial-gradient(circle at 20% 20%, #1a2030, #0f1115 45%),
     radial-gradient(circle at 80% 0%, #152030, #0f1115 40%),
     radial-gradient(circle at 60% 70%, #101525, #0f1115 35%);
   background-attachment: fixed;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 * {
@@ -52,11 +86,14 @@ a {
 }
 
 .brand-mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--accent), #38bdf8);
-  box-shadow: 0 10px 25px rgba(94, 234, 212, 0.4);
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(94, 234, 212, 0.14), rgba(56, 189, 248, 0.16));
+  box-shadow: 0 12px 26px rgba(94, 234, 212, 0.35);
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(94, 234, 212, 0.4);
 }
 
 .brand h1 {
@@ -80,12 +117,14 @@ button {
   font-weight: 600;
   letter-spacing: -0.01em;
   cursor: pointer;
-  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+  transition: transform var(--fast) var(--ease), border-color var(--fast) var(--ease),
+    background var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 
 button:hover {
   transform: translateY(-1px);
   border-color: var(--accent);
+  box-shadow: 0 6px 22px rgba(94, 234, 212, 0.15);
 }
 
 button.primary {
@@ -149,12 +188,21 @@ button.secondary {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease),
+    border-color var(--fast) var(--ease);
+  animation: fadeInUp var(--normal) var(--ease) both;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  border-color: rgba(94, 234, 212, 0.4);
 }
 
 .badge {
@@ -190,6 +238,7 @@ button.secondary {
   padding: 32px;
   text-align: center;
   color: var(--muted);
+  animation: fadeInUp var(--normal) var(--ease) both;
 }
 
 .form {
@@ -200,6 +249,7 @@ button.secondary {
   padding: 16px;
   border-radius: 16px;
   border: 1px solid var(--border);
+  animation: fadeInUp var(--normal) var(--ease) both;
 }
 
 .form-grid {
@@ -234,6 +284,7 @@ button.secondary {
   display: grid;
   place-items: center;
   z-index: 10;
+  animation: fadeIn var(--fast) linear;
 }
 
 .modal {
@@ -247,6 +298,7 @@ button.secondary {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  animation: pop var(--normal) var(--ease);
 }
 
 .footer-actions {
@@ -267,5 +319,13 @@ button.secondary {
 
   .card-header {
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import SnippetCard from './components/SnippetCard';
 import SnippetForm from './components/SnippetForm';
 import Modal from './components/Modal';
+import LogoMark from './components/LogoMark';
 import { useSnippets, SavePayload } from './hooks/useSnippets';
 import { DuplicateConflicts, Snippet } from './types';
 
@@ -85,7 +86,7 @@ const App = () => {
     <div className="app-shell">
       <header className="header">
         <div className="brand">
-          <div className="brand-mark" />
+          <LogoMark />
           <div>
             <h1>Code Snippet Manager</h1>
             <p className="muted" style={{ margin: 0 }}>
