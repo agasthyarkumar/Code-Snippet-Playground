@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Github, GitBranch, Moon, Sun, Plus } from 'lucide-react';
+import { Github, GitBranch, Moon, Sun, Plus, X } from 'lucide-react';
 import SnippetCard from './components/SnippetCard';
 import SnippetForm from './components/SnippetForm';
 import Modal from './components/Modal';
@@ -24,6 +24,7 @@ const App = () => {
   const [languageFilter, setLanguageFilter] = useState('');
   const [editing, setEditing] = useState<Snippet | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [duplicateConflicts, setDuplicateConflicts] = useState<DuplicateConflicts | undefined>();
   const [trimWarning, setTrimWarning] = useState(false);
   const [pendingPayload, setPendingPayload] = useState<SavePayload | null>(null);
@@ -92,13 +93,25 @@ const App = () => {
   const startCreate = () => {
     resetFormState();
     setEditing(null);
+    setIsClosing(false);
     setShowForm(true);
   };
 
   const startEdit = (snippet: Snippet) => {
     resetFormState();
     setEditing(snippet);
+    setIsClosing(false);
     setShowForm(true);
+  };
+
+  const closeForm = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowForm(false);
+      setEditing(null);
+      resetFormState();
+      setIsClosing(false);
+    }, 300);
   };
 
   return (
@@ -131,39 +144,42 @@ const App = () => {
               <GitBranch size={18} />
             </a>
             <button
-              className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"
+              className="text-black dark:text-white opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110 transform"
               type="button"
               onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              <div className={`transition-all duration-300 ${theme === 'dark' ? 'rotate-180' : 'rotate-0'}`}>
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </div>
             </button>
-            <button className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform" onClick={startCreate} type="button" aria-label="Add snippet">
-              <Plus size={18} />
+            <button 
+              className="text-black dark:text-white opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110 transform" 
+              onClick={() => {
+                if (showForm) {
+                  closeForm();
+                } else {
+                  startCreate();
+                }
+              }} 
+              type="button" 
+              aria-label={showForm ? "Close form" : "Add snippet"}
+            >
+              <div className={`transition-all duration-300 ${showForm ? 'rotate-45' : 'rotate-0'}`}>
+                <Plus size={18} />
+              </div>
             </button>
           </div>
         </header>
 
         <div className="w-full space-y-3">
-          <div className="panel animate-soft flex flex-col gap-3 md:flex-row md:items-center md:gap-4 shadow-md">
+          <div className="panel animate-soft shadow-md">
             <input
-              className={`${inputClass} md:flex-[3]`}
+              className={inputClass}
               placeholder="Search by name, description, or tag"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <select
-              className={`${inputClass} md:flex-[1]`}
-              value={languageFilter}
-              onChange={(e) => setLanguageFilter(e.target.value)}
-            >
-              <option value="">All languages</option>
-              {allLanguages.map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 
@@ -182,24 +198,22 @@ const App = () => {
         )}
 
         {showForm && (
-          <SnippetForm
-            initial={editing}
-            languages={allLanguages}
-            duplicateConflicts={duplicateConflicts}
-            trimWarning={trimWarning}
-            onSubmit={handleSubmit}
-            onCancel={() => {
-              setShowForm(false);
-              setEditing(null);
-              resetFormState();
-            }}
-            buttonClass={buttonClass}
-            inputClass={inputClass}
-          />
+          <div className={isClosing ? 'animate-slide-down' : 'animate-slide-up'}>
+            <SnippetForm
+              initial={editing}
+              languages={allLanguages}
+              duplicateConflicts={duplicateConflicts}
+              trimWarning={trimWarning}
+              onSubmit={handleSubmit}
+              onCancel={closeForm}
+              buttonClass={buttonClass}
+              inputClass={inputClass}
+            />
+          </div>
         )}
 
         {duplicateConflicts && pendingPayload && (
-          <div className="panel animate-soft border border-black text-sm">
+          <div className="panel animate-slide-up border border-black text-sm">
             <p className="mb-2 font-semibold">Duplicate detected.</p>
             <p className="text-xs">Review the conflicts and save again if intentional.</p>
             <div className="mt-3 flex justify-end gap-2">
@@ -214,8 +228,8 @@ const App = () => {
         )}
 
         <div className="flex w-full flex-col gap-4">
-          {filtered.length === 0 && (
-            <div className="panel animate-scale flex flex-col items-center gap-3 text-center text-black/70 dark:text-white/70 shadow-md">
+          {snippets.length === 0 && !showForm && (
+            <div className="panel animate-slide-up flex flex-col items-center gap-3 text-center text-black/70 dark:text-white/70 shadow-md">
               <div className="text-sm">No snippets yet. Create one to get started.</div>
               <button className={buttonClass} onClick={startCreate} type="button">
                 Create snippet
