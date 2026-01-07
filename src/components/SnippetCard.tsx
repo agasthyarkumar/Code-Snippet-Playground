@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Snippet } from '../types';
 
 type SnippetCardProps = {
@@ -9,6 +10,17 @@ type SnippetCardProps = {
 };
 
 const SnippetCard = ({ snippet, onEdit, onDelete }: SnippetCardProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(snippet.code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      // ignore errors
+    }
+  };
   return (
     <div className="card">
       <div className="card-header">
@@ -18,14 +30,15 @@ const SnippetCard = ({ snippet, onEdit, onDelete }: SnippetCardProps) => {
         </div>
         <div className="badge">{snippet.language ?? 'auto'}</div>
       </div>
-      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)' }}>
+      <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', background: '#fff' }}>
         <SyntaxHighlighter
           language={snippet.language ?? 'text'}
-          style={oneLight}
-          showLineNumbers
+          style={prism}
+          showLineNumbers={false}
           customStyle={{
             margin: 0,
             fontSize: 13,
+            background: '#fff',
           }}
         >
           {snippet.code}
@@ -41,6 +54,9 @@ const SnippetCard = ({ snippet, onEdit, onDelete }: SnippetCardProps) => {
         </div>
       )}
       <div className="actions">
+        <button className="secondary" onClick={handleCopy} type="button">
+          {copied ? 'Copied' : 'Copy'}
+        </button>
         <button className="secondary" onClick={() => onEdit(snippet)} type="button">
           Edit
         </button>
