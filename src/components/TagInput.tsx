@@ -4,9 +4,10 @@ type TagInputProps = {
   value: string[];
   onChange: (value: string[]) => void;
   placeholder?: string;
+  className?: string;
 };
 
-const TagInput = ({ value, onChange, placeholder }: TagInputProps) => {
+const TagInput = ({ value, onChange, placeholder, className }: TagInputProps) => {
   const [input, setInput] = useState('');
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const TagInput = ({ value, onChange, placeholder }: TagInputProps) => {
 
   return (
     <input
-      className="input"
+      className={className}
       value={input}
       placeholder={placeholder ?? 'comma,separated,tags'}
       onChange={(e) => setInput(e.target.value)}

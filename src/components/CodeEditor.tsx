@@ -5,12 +5,13 @@ type CodeEditorProps = {
   language?: string;
   onChange: (value: string) => void;
   rows?: number;
+  className?: string;
 };
 
-const CodeEditor = ({ value, onChange, rows = 14 }: CodeEditorProps) => {
+const CodeEditor = ({ value, onChange, rows = 14, className }: CodeEditorProps) => {
   return (
     <textarea
-      className="textarea"
+      className={className}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       rows={rows}

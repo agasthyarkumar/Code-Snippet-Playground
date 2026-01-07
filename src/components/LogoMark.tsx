@@ -1,6 +1,16 @@
-const LogoMark = () => {
+type LogoMarkProps = {
+  className?: string;
+};
+
+const LogoMark = ({ className }: LogoMarkProps) => {
   return (
-    <div className="brand-mark" aria-hidden="true">
+    <div
+      className={
+        className ??
+        'flex h-12 w-12 items-center justify-center rounded-xl border border-gray-300 bg-white shadow-soft'
+      }
+      aria-hidden="true"
+    >
       <svg
         width="28"
         height="28"
@@ -9,10 +19,10 @@ const LogoMark = () => {
         xmlns="http://www.w3.org/2000/svg"
         role="presentation"
       >
-        <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#grad)" opacity="0.08" />
+        <rect x="4" y="4" width="56" height="56" rx="14" fill="#111827" opacity="0.06" />
         <path
           d="M22 24L14 32L22 40"
-          stroke="#E8ECF4"
+          stroke="#111827"
           strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -20,7 +30,7 @@ const LogoMark = () => {
         />
         <path
           d="M42 24L50 32L42 40"
-          stroke="#E8ECF4"
+          stroke="#111827"
           strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -28,17 +38,11 @@ const LogoMark = () => {
         />
         <path
           d="M28 44L36 20"
-          stroke="#5EEAD4"
+          stroke="#111827"
           strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <defs>
-          <linearGradient id="grad" x1="12" y1="12" x2="52" y2="52" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#5EEAD4" />
-            <stop offset="1" stopColor="#38BDF8" />
-          </linearGradient>
-        </defs>
       </svg>
     </div>
   );

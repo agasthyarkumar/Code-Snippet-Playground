@@ -9,6 +9,7 @@ type ModalProps = {
   cancelLabel?: string;
   tone?: 'danger' | 'default';
   children?: ReactNode;
+  buttonClass?: string;
 };
 
 const Modal = ({
@@ -20,23 +21,24 @@ const Modal = ({
   cancelLabel = 'Cancel',
   tone = 'default',
   children,
+  buttonClass = 'btn-ghost',
 }: ModalProps) => (
-  <div className="modal-backdrop" role="dialog" aria-modal="true">
-    <div className="modal">
-      <div>
-        <h3 style={{ margin: 0 }}>{title}</h3>
-        {description && <p className="muted" style={{ marginTop: 6 }}>{description}</p>}
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div className="w-full max-w-md rounded-xl border border-gray-300 bg-white p-6 text-gray-900 shadow-soft">
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold leading-tight">{title}</h3>
+        {description && <p className="text-sm text-gray-600">{description}</p>}
       </div>
       {children}
-      <div className="footer-actions">
-        <button className="secondary" onClick={onCancel} type="button">
+      <div className="mt-6 flex justify-end gap-2">
+        <button className={buttonClass} onClick={onCancel} type="button">
           {cancelLabel}
         </button>
-        <button
-          className={tone === 'danger' ? 'danger' : 'primary'}
-          onClick={onConfirm}
-          type="button"
-        >
+        <button className={buttonClass} onClick={onConfirm} type="button">
           {confirmLabel}
         </button>
       </div>

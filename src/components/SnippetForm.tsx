@@ -13,6 +13,8 @@ type SnippetFormProps = {
   trimWarning?: boolean;
   onSubmit: (payload: SavePayload) => void;
   onCancel: () => void;
+  buttonClass: string;
+  inputClass: string;
 };
 
 const SnippetForm = ({
@@ -22,6 +24,8 @@ const SnippetForm = ({
   trimWarning,
   onSubmit,
   onCancel,
+  buttonClass,
+  inputClass,
 }: SnippetFormProps) => {
   const [name, setName] = useState(initial?.name ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
@@ -55,22 +59,22 @@ const SnippetForm = ({
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <div className="form-grid">
-        <label className="label">
-          Name*
+    <form className="panel space-y-4" onSubmit={handleSubmit}>
+      <div className="grid gap-3 md:grid-cols-3">
+        <label className="space-y-1 text-sm font-medium text-gray-700">
+          <span className="text-xs uppercase tracking-wide text-gray-500">Name*</span>
           <input
-            className="input"
+            className={inputClass}
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Unique snippet name"
             required
           />
         </label>
-        <label className="label">
-          Language
+        <label className="space-y-1 text-sm font-medium text-gray-700">
+          <span className="text-xs uppercase tracking-wide text-gray-500">Language</span>
           <input
-            className="input"
+            className={inputClass}
             list="language-options"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
@@ -82,45 +86,52 @@ const SnippetForm = ({
             ))}
           </datalist>
         </label>
-        <label className="label">
-          Key terms
-          <TagInput value={keyTerms} onChange={setKeyTerms} placeholder="auth, api, utils" />
+        <label className="space-y-1 text-sm font-medium text-gray-700">
+          <span className="text-xs uppercase tracking-wide text-gray-500">Key terms</span>
+          <TagInput value={keyTerms} onChange={setKeyTerms} placeholder="auth, api, utils" className={inputClass} />
         </label>
       </div>
 
-      <label className="label">
-        Description
+      <label className="space-y-1 text-sm font-medium text-gray-700">
+        <span className="text-xs uppercase tracking-wide text-gray-500">Description</span>
         <input
-          className="input"
+          className={inputClass}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Short context for this snippet"
         />
       </label>
 
-      <label className="label">
-        Snippet*
-        <CodeEditor value={code} language={language || undefined} onChange={setCode} />
+      <label className="space-y-2 text-sm font-medium text-gray-700">
+        <span className="text-xs uppercase tracking-wide text-gray-500">Snippet*</span>
+        <CodeEditor
+          value={code}
+          language={language || undefined}
+          onChange={setCode}
+          className={`${inputClass} h-auto min-h-[260px] resize-y whitespace-pre font-mono`}
+        />
       </label>
 
       {trimWarning && (
-        <div className="alert warn">⚠️ Trailing or leading spaces detected and will be removed.</div>
+        <div className="rounded-lg border border-amber-500 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          Trailing or leading spaces detected and will be removed.
+        </div>
       )}
       {(duplicateConflicts?.byName || duplicateConflicts?.byContent) && (
-        <div className="alert warn">
-          ⚠️ This snippet appears to be a duplicate. Please review before saving.
-          <div className="muted" style={{ marginTop: 6 }}>
+        <div className="rounded-lg border border-amber-500 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          This snippet appears to be a duplicate. Please review before saving.
+          <div className="mt-1 text-xs text-amber-900/80">
             Conflicts: {duplicateConflicts.byName ? 'name ' : ''}
             {duplicateConflicts.byContent ? 'code content' : ''}
           </div>
         </div>
       )}
 
-      <div className="actions" style={{ justifyContent: 'flex-end' }}>
-        <button type="button" className="secondary" onClick={onCancel}>
+      <div className="flex justify-end gap-2">
+        <button type="button" className={buttonClass} onClick={onCancel}>
           Cancel
         </button>
-        <button type="submit" className="primary">
+        <button type="submit" className={buttonClass}>
           {initial ? 'Update snippet' : 'Save snippet'}
         </button>
       </div>
