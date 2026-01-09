@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clipboard, Pencil, Trash } from 'lucide-react';
+import { Clipboard, Check, Pencil, Trash } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { prism, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Snippet } from '../types';
@@ -64,12 +64,23 @@ const SnippetCard = ({ snippet, onEdit, onDelete, theme = 'light' }: SnippetCard
       )}
       <div className="flex justify-end gap-4">
         <button
-          className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"
+          className={`text-black dark:text-white opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110 transform relative ${
+            copied ? 'opacity-100' : ''
+          }`}
           onClick={handleCopy}
           type="button"
           title={copied ? 'Copied!' : 'Copy snippet'}
         >
-          <Clipboard size={18} />
+          <div className={`transition-all duration-300 ${
+            copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+          }`}>
+            <Check size={18} />
+          </div>
+          <div className={`absolute inset-0 transition-all duration-300 flex items-center justify-center ${
+            copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
+          }`}>
+            <Clipboard size={18} />
+          </div>
         </button>
         <button
           className="text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-200 hover:scale-110 transform"

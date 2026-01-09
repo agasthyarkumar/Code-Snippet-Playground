@@ -1,118 +1,42 @@
-import { useEffect, useMemo, useState } from 'react';
 import { Github, GitBranch, Moon, Sun, Plus } from 'lucide-react';
 import SnippetCard from './components/SnippetCard';
 import SnippetForm from './components/SnippetForm';
 import Modal from './components/Modal';
 import LogoMark from './components/LogoMark';
 import LanguageStats from './components/LanguageStats';
-import { useSnippets, SavePayload } from './hooks/useSnippets';
-import { DuplicateConflicts, Snippet } from './types';
-
-const getInitialTheme = (): 'light' | 'dark' => {
-  if (typeof window === 'undefined') return 'light';
-  const saved = window.localStorage.getItem('theme');
-  if (saved === 'light' || saved === 'dark') return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-};
+import { useAppContext } from './contexts/AppContext';
 
 const buttonClass = 'btn-ghost';
 const inputClass = 'field-base';
 
 const App = () => {
-  const { snippets, search, save, remove, allLanguages, forceSave } = useSnippets();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [languageFilter, setLanguageFilter] = useState('');
-  const [editing, setEditing] = useState<Snippet | null>(null);
-  const [showForm, setShowForm] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [duplicateConflicts, setDuplicateConflicts] = useState<DuplicateConflicts | undefined>();
-  const [trimWarning, setTrimWarning] = useState(false);
-  const [pendingPayload, setPendingPayload] = useState<SavePayload | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<Snippet | null>(null);
-  const [theme, setTheme] = useState<'light' | 'dark'>(getInitialTheme);
-
-  const filtered = useMemo(
-    () => search(searchTerm, languageFilter || undefined),
-    [search, searchTerm, languageFilter],
-  );
-
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.toggle('dark', theme === 'dark');
-    window.localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const resetFormState = () => {
-    setDuplicateConflicts(undefined);
-    setTrimWarning(false);
-    setPendingPayload(null);
-    setError(null);
-  };
-
-  const handleSubmit = (payload: SavePayload) => {
-    setError(null);
-    try {
-      const result = save(payload);
-      setTrimWarning(Boolean(result.trimmedWarning));
-
-      if (result.conflicts) {
-        setDuplicateConflicts(result.conflicts);
-        setPendingPayload(payload);
-        return;
-      }
-
-      setDuplicateConflicts(undefined);
-      setPendingPayload(null);
-      setShowForm(false);
-      setEditing(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to save snippet');
-    }
-  };
-
-  const handleForceSave = () => {
-    if (!pendingPayload) return;
-    const result = forceSave(pendingPayload);
-    if (result.snippet) {
-      setShowForm(false);
-      setEditing(null);
-      resetFormState();
-    }
-  };
-
-  const onDelete = (snippet: Snippet) => setConfirmDelete(snippet);
-
-  const confirmDeleteHandler = () => {
-    if (confirmDelete) {
-      remove(confirmDelete.id);
-      setConfirmDelete(null);
-    }
-  };
-
-  const startCreate = () => {
-    resetFormState();
-    setEditing(null);
-    setIsClosing(false);
-    setShowForm(true);
-  };
-
-  const startEdit = (snippet: Snippet) => {
-    resetFormState();
-    setEditing(snippet);
-    setIsClosing(false);
-    setShowForm(true);
-  };
-
-  const closeForm = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setShowForm(false);
-      setEditing(null);
-      resetFormState();
-      setIsClosing(false);
-    }, 300);
-  };
+  const {
+    snippets,
+    allLanguages,
+    filtered,
+    searchTerm,
+    setSearchTerm,
+    languageFilter,
+    setLanguageFilter,
+    theme,
+    toggleTheme,
+    editing,
+    showForm,
+    duplicateConflicts,
+    trimWarning,
+    error,
+    pendingPayload,
+    handleSubmit,
+    handleForceSave,
+    startCreate,
+    startEdit,
+    closeForm,
+    onDelete,
+    confirmDeleteHandler,
+    cancelDelete,
+    confirmDelete,
+    isClosing,
+  } = useAppContext();
 
   return (
     <div className="min-h-screen bg-white text-black transition-colors dark:bg-black dark:text-white">
@@ -146,7 +70,7 @@ const App = () => {
             <button
               className="text-black dark:text-white opacity-60 hover:opacity-100 transition-all duration-300 hover:scale-110 transform"
               type="button"
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              onClick={toggleTheme}
               aria-label="Toggle theme"
             >
               <div className={`transition-all duration-300 ${theme === 'dark' ? 'rotate-180' : 'rotate-0'}`}>
@@ -187,7 +111,7 @@ const App = () => {
           <LanguageStats
             snippets={snippets}
             selected={languageFilter || undefined}
-            onSelect={(lang) => setLanguageFilter((prev) => (prev === lang ? '' : lang))}
+            onSelect={(lang) => setLanguageFilter(languageFilter === lang ? '' : lang)}
           />
         </div>
 
@@ -217,7 +141,7 @@ const App = () => {
             <p className="mb-2 font-semibold">Duplicate detected.</p>
             <p className="text-xs">Review the conflicts and save again if intentional.</p>
             <div className="mt-3 flex justify-end gap-2">
-              <button className={buttonClass} onClick={() => setDuplicateConflicts(undefined)} type="button">
+              <button className={buttonClass} onClick={cancelDelete} type="button">
                 Adjust form
               </button>
               <button className={buttonClass} onClick={handleForceSave} type="button">
@@ -251,7 +175,7 @@ const App = () => {
           <Modal
             title="Delete snippet?"
             description={`Delete "${confirmDelete.name}". This action cannot be undone.`}
-            onCancel={() => setConfirmDelete(null)}
+            onCancel={cancelDelete}
             onConfirm={confirmDeleteHandler}
             tone="danger"
             confirmLabel="Delete"
