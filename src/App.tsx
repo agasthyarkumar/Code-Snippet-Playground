@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Github, GitBranch, Moon, Sun, Plus, X } from 'lucide-react';
+import { Github, GitBranch, Moon, Sun, Plus } from 'lucide-react';
 import SnippetCard from './components/SnippetCard';
 import SnippetForm from './components/SnippetForm';
 import Modal from './components/Modal';
@@ -242,7 +242,6 @@ const App = () => {
               snippet={snippet}
               onEdit={startEdit}
               onDelete={onDelete}
-              buttonClass={buttonClass}
               theme={theme}
             />
           ))}

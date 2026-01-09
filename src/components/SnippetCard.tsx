@@ -8,11 +8,10 @@ type SnippetCardProps = {
   snippet: Snippet;
   onEdit: (snippet: Snippet) => void;
   onDelete: (snippet: Snippet) => void;
-  buttonClass?: string;
   theme?: 'light' | 'dark';
 };
 
-const SnippetCard = ({ snippet, onEdit, onDelete, buttonClass = 'btn-ghost', theme = 'light' }: SnippetCardProps) => {
+const SnippetCard = ({ snippet, onEdit, onDelete, theme = 'light' }: SnippetCardProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -20,7 +19,7 @@ const SnippetCard = ({ snippet, onEdit, onDelete, buttonClass = 'btn-ghost', the
       await navigator.clipboard.writeText(snippet.code);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch (e) {
+    } catch {
       // ignore errors
     }
   };

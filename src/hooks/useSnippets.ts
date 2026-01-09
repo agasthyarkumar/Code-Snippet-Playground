@@ -77,7 +77,7 @@ export const useSnippets = () => {
           try {
             localStorage.setItem(STORAGE_KEY, legacy);
             localStorage.removeItem(k);
-          } catch (e) {
+          } catch {
             // non-fatal; continue with parsed legacy data in memory
           }
           break;

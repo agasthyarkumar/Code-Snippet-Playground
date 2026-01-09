@@ -19,7 +19,7 @@ const Modal = ({
   onCancel,
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
-  tone = 'default',
+  tone: _tone = 'default',
   children,
   buttonClass = 'btn-ghost',
 }: ModalProps) => (
