@@ -34,7 +34,7 @@ const App = () => {
 
   const filtered = useMemo(
     () => search(searchTerm, languageFilter || undefined),
-    [search, searchTerm, languageFilter, snippets],
+    [search, searchTerm, languageFilter],
   );
 
   useEffect(() => {

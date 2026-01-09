@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DuplicateConflicts, Snippet } from '../types';
 import { SavePayload } from '../hooks/useSnippets';
 import CodeEditor from './CodeEditor';
